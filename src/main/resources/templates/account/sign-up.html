@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>instagram</title>
+
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="shortcut icon" href="../imgs/instagram.png">
+</head>
+<body>
+
+
+<section id="container">
+
+
+    <div id="main_container">
+
+        <div class="form_container">
+
+            <div class="form">
+
+
+                <h1 class="sprite_insta_big_logo title"></h1>
+
+                <p style="color: gray; margin-top: 5px; margin-bottom: 20px; font-size: 21px; line-height: 26px">
+                    친구들의 사진과 동영상을 보려면 가입하세요.</p>
+
+                <form th:action="@{/account/sign-up}" th:object="${signUpForm}" method="post">
+                    <p class="login_user_name">
+                        <input type="email" th:field="*{email}" id="user_email" placeholder="이메일 주소" style="background-color: lightgray" required>
+                        <small style="color:red; font-size: 12px" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</small>
+                    </p>
+
+                    <p class="login_user_name">
+                        <input type="text" th:field="*{userName}" id="user_name" placeholder="사용자명" style="background-color: lightgray" required minlength="3" maxlength="20">
+                        <small style="color:red; font-size: 12px" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">Error</small>
+                    </p>
+
+                    <p class="login_user_name">
+                        <input type="text" th:field="*{realName}" id="user_realName" placeholder="성명" style="background-color: lightgray" required minlength="1" maxlength="10">
+                    </p>
+
+                    <p class="login_user_password">
+                        <input type="password" th:field="*{password}" id="user_password" placeholder="비밀번호" style="background-color: lightgray" required minlength="8" maxlength="20">
+
+                    </p>
+
+                    <input type="submit" id="submit_btn" value="가입" class="submit_btn">
+                </form>
+
+            </div>
+
+            <div class="bottom_box">
+                <div>
+                    <span>계정이 있으신가요? </span><a href="/" style="color: deepskyblue">로그인</a>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+</body>
+</html>

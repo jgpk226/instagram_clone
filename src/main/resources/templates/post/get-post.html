@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>instagram</title>
+
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/detail-page.css">
+    <link rel="shortcut icon" href="../imgs/instagram.png">
+
+    <style>
+        #main_container {
+            /*height: 6000px;*/
+        }
+        .writer_input {
+            margin-left: 20px;
+            margin-top: 3px;
+            border: none;
+            background-color: transparent;
+            margin-top: 10px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+        .content_input {
+            margin-left: 20px; 
+            margin-top: 3px; 
+            border: none; 
+            background-color: transparent;
+        }
+    </style>
+</head>
+<body>
+
+<section id="container">
+
+    <div th:replace="fragments.html :: header"></div>
+
+
+    <div id="main_container">
+
+        <section class="b_inner">
+
+            <div class="contents_box">
+
+                <article class="contents cont01">
+                    <!-- 왼쪽 사진 + 내용 부분 -->
+                    <div class="img_section">
+                        <div class="trans_inner">
+                            <img th:src="${post.image}" alt="포스트 이미지" style="width: 600px; height: 600px">
+                        </div>
+
+                        <div>
+                            <input disabled value="작성자" class="writer_input"  th:value="${post.writer.username}"><br>
+                            <input disabled value="내용" class="content_input" th:value="${post.content}">
+                        </div>
+                    </div>
+
+
+                    <!-- 오른쪽 댓글창 부분 -->
+                    <div class="detail--right_box">
+                        <!-- 작성자 프로필 -->
+                        <header class="top">
+                            <div class="user_container">
+                                <div class="profile_img">
+                                    <img th:if="${!pageAccount.isUseProfileImage()}" src="imgs/default.png" alt="기본 이미지">
+                                    <img th:if="${pageAccount.isUseProfileImage()}" th:src="${pageAccount.profileImage}" alt="프로필 이미지">
+                                </div>
+                                <div class="user_name">
+                                    <a th:href="@{'/' + ${post.writer.username}}" style="color: black; text-decoration: none">
+                                        <div class="nick_name" th:text="${pageAccount.username}">KindTiger</div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="sprite_more_icon" data-name="more">
+                                <ul class="more_detail">
+                                    <li>팔로우</li>
+                                    <li>수정</li>
+                                    <li>삭제</li>
+                                </ul>
+                            </div>
+                        </header>
+
+                        <!-- 댓글 목록 -->
+                        <section class="scroll_section" style="height: 450px">
+                            <!-- 댓글 (반복시켜) -->
+                            <div class="user_container-detail" th:each="comment : ${commentList}">
+                                <div class="user">
+                                    <img th:if="${!comment.writer.isUseProfileImage()}" src="imgs/default.png" alt="기본 이미지">
+                                    <img th:if="${comment.writer.isUseProfileImage()}" th:src="${comment.writer.profileImage}" alt="기본 이미지">
+                                </div>
+                                <div class="comment">
+                                    <span class="user_id" th:text="${comment.writer.username}">in0.lee</span>
+                                    <span th:text="${comment.comment}"></span>
+                                    <div class="time" th:text="${comment.getFormattedSavedDate()}" style="font-size: 10px; margin-top: 5px">2시간</div>
+                                    <div class="icon_wrap">
+                                        <div class="more_trigger">
+                                            <div class="sprite_more_icon"></div>
+                                        </div>
+                                        <div>
+                                            <div class="sprite_small_heart_icon_outline"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 좋아요, 댓글, 공유 버튼 -->
+                        <div class="bottom_icons">
+                            <div class="left_icons">
+                                <div class="heart_btn">
+                                    <form th:action="@{/like}" method="post">
+                                        <input type="hidden" name="postId" th:value="${post.id}">
+                                        <button type="submit" class="sprite_heart_icon_outline" data-name="heartbeat" th:if="${!isLiked}"></button>
+                                        <button type="submit" class="sprite_heart_icon" data-name="heartbeat" th:if="${isLiked}"></button>
+                                    </form>
+                                </div>
+                                <div>
+                                    <div class="sprite_bubble_icon"></div>
+                                </div>
+                                <div>
+                                    <div class="sprite_share_icon" data-name="share"></div>
+                                </div>
+                            </div>
+
+                            <div class="right_icon">
+                                <div class="sprite_bookmark_outline" data-name="book-mark"></div>
+                            </div>
+                        </div>
+
+                        <div class="count_likes">
+                            좋아요
+                            <span class="count" th:text="${post.likedBy.size()}">2,351</span>
+                            개
+                        </div>
+                        <div class="timer" th:text="${post.getFormattedSavedDate()}">2시간</div>
+
+                        <!-- 댓글 작성 -->
+                        <div class="commit_field">
+                            <form class="commit_field" th:action="@{/comment/new}" method="post">
+                                <input type="text" name="postId" th:value="${post.id}" style="display: none">
+                                <input type="text" name="comment" placeholder="댓글달기..">
+                                <button type="submit" class="upload_btn">게시</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <div class="del_pop">
+        <div class="btn_box">
+            <div class="del">삭제</div>
+            <div class="cancel">취소</div>
+        </div>
+   </div>
+
+</section>
+
+
+
+</body>
+</html>

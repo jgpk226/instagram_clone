@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>instagram</title>
+
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="shortcut icon" href="../imgs/instagram.png">
+    <style>
+        .followButton {
+            display: contents;
+        }
+        .logout {
+            height: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 140px;
+            border: 1px solid #dbdbdb;
+            border-radius: 3px;
+            color: #262626;
+            font-weight: 600;
+            vertical-align: text-bottom;
+            text-decoration: none;
+            box-sizing: border-box;
+        }
+        .pic {
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+
+<section id="container">
+
+    <div th:replace="fragments.html :: header"></div>
+
+
+    <div id="main_container">
+
+        <section class="b_inner">
+
+            <div class="hori_cont">
+                <div class="profile_wrap">
+                    <div class="profile_img">
+                        <img th:if="${!pageAccount.useProfileImage}" src="../imgs/default.png" alt="기본 이미지">
+                        <img th:if="${pageAccount.useProfileImage}" th:src="${account.getProfileImage()}" alt="프로필 이미지">
+                    </div>
+                </div>
+
+                <div class="detail">
+                    <div class="top">
+                        <div class="user_name" th:text="${pageAccount.username}" style="margin-top: 0;">KindTiger</div>
+                        <!-- 본인이 아닐 경우 -->
+                        <div class="followButton" th:if="${account != pageAccount}">
+                            <a th:if="${!isFollowing}" th:href="@{'account?from=' + ${account.id} + '&to=' + ${pageAccount.id} + '&account=' + ${pageAccount.username}}" class="profile_edit" style="padding: 0">친구 추가</a>
+                            <a th:if="${isFollowing}" th:href="@{'account/delete?from=' + ${account.id} + '&to=' + ${pageAccount.id} + '&account=' + ${pageAccount.username}}" class="profile_edit" style="padding: 0">친구 삭제</a>
+                        </div>
+                        <!-- 본인일 경우 -->
+                        <div class="followButton" th:if="${account == pageAccount}" >
+                            <a href="account/edit" class="profile_edit" style="padding: 0">프로필 편집</a>
+                            <form class="logout" th:action="@{/logout}" method="post">
+                                <button type="submit" class="logout">로그아웃</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <ul class="middle" style="padding-bottom: 0; height: 40px">
+                        <li>
+                            <span>게시물</span>
+                            <span th:text="${pageAccount.postList.size()}"></span>
+                        </li>
+                        <li>
+                            <span>팔로워</span>
+                            <span th:text="${followers}"></span>
+                        </li>
+                        <li>
+                            <span>팔로우</span>
+                            <span th:text="${followings}"></span>
+                        </li>
+                    </ul>
+                    <p class="about">
+                        <span class="nick_name" th:text="${pageAccount.realName}">kindtigerrr</span>
+                        <br>
+                        <span class="book_mark" th:text="${pageAccount.description}">bookmark</span>
+                    </p>
+
+                </div>
+            </div>
+
+            <hr style="color: gray; margin-top: 20px; margin-bottom: 50px">
+
+            <div class="mylist_contents contents_container active" style="justify-content: left">
+                <div class="pic" th:each="post : ${postList}">
+                    <a th:href="@{'/' + ${account.getUsername()} + '?post=' + ${post.getId()}}"><img th:src="${post.getImage()}" alt="포스팅 사진"></a>
+                </div>
+            </div>
+
+            <!-- 이건 뭘까?? -->
+            <div class="bookmark_contents contents_container">
+                <div class="pic">
+                    <a href="#"><img src="imgs/img_section/img03.jpg" alt=""></a>
+                </div>
+                <div class="pic">
+                    <a href="#"><img src="imgs/img_section/img01.jpg" alt=""></a>
+                </div>
+                <div class="pic">
+                    <a href="#"> <img src="imgs/img_section/img02.jpg" alt=""></a>
+                </div>
+                <div class="pic">
+                    <a href="#"> <img src="imgs/img_section/img01.jpg" alt=""></a>
+                </div>
+                <div class="pic">
+                    <a href="#"> <img src="imgs/img_section/img02.jpg" alt=""></a>
+                </div>
+                <div class="pic">
+                    <a href="#"> <img src="imgs/img_section/img03.jpg" alt=""></a>
+                </div>
+                <div class="pic">
+                    <a href="#"> <img src="imgs/img_section/img01.jpg" alt=""></a>
+                </div>
+                <div class="pic">
+                    <a href="#"> <img src="imgs/img_section/img02.jpg" alt=""></a>
+                </div>
+                <div class="pic">
+                    <a href="#"> <img src="imgs/img_section/img02.jpg" alt=""></a>
+                </div>
+            </div>
+
+
+
+
+        </section>
+    </div>
+
+
+</section>
+
+
+</body>
+</html>
